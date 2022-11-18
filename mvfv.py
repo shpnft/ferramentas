@@ -3,6 +3,30 @@ from random import shuffle
 import argparse
 from subprocess import run
 
+def accept(f, size_gt, size_lt ):
+    EXTENSIONS = {
+            ".mp4",
+            ".mkv",
+            ".wmv",
+            ".avi",
+            ".webm",
+            ".mts",
+            ".mov",
+            ".mpg",
+            ".m4v",
+            ".mpeg",
+            ".asf",
+            ".3gp",
+            }
+
+    if not f.exists(): return False
+    if not f.is_file(): return False
+    if not f.suffix.lower() in EXTENSIONS: return False
+    if size_gt is not None and f.stat().st_size < size_gt: return False
+    if size_lt is not None and f.stat().st_size > size_lt: return False
+
+    return True
+
 parser = argparse.ArgumentParser()
 parser.add_argument("folder")
 parser.add_argument("--size-lt", type=float)
@@ -11,32 +35,8 @@ parser.parse_args()
 args = parser.parse_args()
 
 SEARCH_DIR = Path(args.folder)
-EXTENSIONS = {
-    ".mp4",
-    ".mkv",
-    ".wmv",
-    ".avi",
-    ".webm",
-    ".mts",
-    ".mov",
-    ".mpg",
-    ".m4v",
-    ".mpeg",
-    ".asf",
-    ".3gp",
-}
 
-accept = lambda f: f.exists() and f.is_file() and f.suffix.lower() in EXTENSIONS
-
-if args.size_gt is not None:
-    temp1 = accept
-    accept = lambda f: temp1(f) and f.stat().st_size >= args.size_gt
-
-if args.size_lt is not None:
-    temp2 = accept
-    accept = lambda f: temp2(f) and f.stat().st_size <= args.size_lt
-
-files = [f for f in SEARCH_DIR.glob("**/*") if accept(f)]
+files = [f for f in SEARCH_DIR.glob("**/*") if accept(f, args.size_gt, args.size_lt)]
 print("{} files found.".format(len(files)))
 shuffle(files)
 
