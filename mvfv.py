@@ -3,7 +3,7 @@ from random import shuffle
 import argparse
 from subprocess import run
 
-def accept(f, size_gt, size_lt ):
+def accept(f, min_size, max_size):
     EXTENSIONS = {
             ".mp4",
             ".mkv",
@@ -22,21 +22,21 @@ def accept(f, size_gt, size_lt ):
     if not f.exists(): return False
     if not f.is_file(): return False
     if not f.suffix.lower() in EXTENSIONS: return False
-    if size_gt is not None and f.stat().st_size < size_gt: return False
-    if size_lt is not None and f.stat().st_size > size_lt: return False
+    if min_size is not None and f.stat().st_size < min_size: return False
+    if max_size is not None and f.stat().st_size > max_size: return False
 
     return True
 
 parser = argparse.ArgumentParser()
 parser.add_argument("folder")
-parser.add_argument("--size-lt", type=float)
-parser.add_argument("--size-gt", type=float)
+parser.add_argument("--max-size", type=float)
+parser.add_argument("--min-size", type=float)
 parser.parse_args()
 args = parser.parse_args()
 
 SEARCH_DIR = Path(args.folder)
 
-files = [f for f in SEARCH_DIR.glob("**/*") if accept(f, args.size_gt, args.size_lt)]
+files = [f for f in SEARCH_DIR.glob("**/*") if accept(f, args.min_size, args.max_size)]
 print("{} files found.".format(len(files)))
 shuffle(files)
 
