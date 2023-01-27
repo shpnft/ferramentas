@@ -31,7 +31,6 @@ parser = argparse.ArgumentParser()
 parser.add_argument("folder")
 parser.add_argument("--max-size", type=float)
 parser.add_argument("--min-size", type=float)
-parser.parse_args()
 args = parser.parse_args()
 
 SEARCH_DIR = Path(args.folder)
