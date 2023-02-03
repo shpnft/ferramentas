@@ -1,7 +1,7 @@
 from datetime import date,timedelta
 
 type_bot = "xdotool key "
-year = 2022
+year = 2023
 
 month=int(input("Mês: "))
 
