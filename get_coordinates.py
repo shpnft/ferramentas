@@ -17,17 +17,18 @@ parser.parse_args()
 args = parser.parse_args()
 
 img = plt.imread(args.imagem)
-xmax, ymax = img.shape[:2]
+ymax, xmax = img.shape[:2]
 
-ax = plt.imshow(img,extent=[0,ymax,0,xmax])
+ax = plt.imshow(img,extent=[0,xmax,0,ymax])
 fig = ax.get_figure()
 fig.canvas.mpl_connect('button_press_event', onClick)
 plt.show()
 
-print(f"xmax: {xmax}, ymax: {ymax}")
+# print(f"xmax: {xmax}, ymax: {ymax}")
 try:
     for p in onClick.p:
-        print(f"x: {p[0]:.2f}, y: {p[1]:.2f}")
+        print(f"x: {p[0]/xmax:.2f}, y: {p[1]/ymax:.2f}")
+        # print(f"x: {p[0]:.2f}, y: {p[1]:.2f}")
 except AttributeError:
     pass
 
