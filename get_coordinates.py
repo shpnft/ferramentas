@@ -6,6 +6,9 @@ def onClick (event):
         return
     if event.ydata is None:
         return
+
+    plt.scatter(event.xdata,event.ydata,s=6)
+    plt.draw()
     try:
         onClick.p.append((event.xdata, event.ydata))
     except AttributeError:
@@ -22,6 +25,7 @@ ymax, xmax = img.shape[:2]
 ax = plt.imshow(img,extent=[0,xmax,0,ymax])
 fig = ax.get_figure()
 fig.canvas.mpl_connect('button_press_event', onClick)
+
 plt.show()
 
 # print(f"xmax: {xmax}, ymax: {ymax}")
